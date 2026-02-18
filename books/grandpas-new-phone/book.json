@@ -1,0 +1,12 @@
+{
+  "id": "grandpas-new-phone",
+  "series": "NEW",
+  "title_ua": "Grandpa’s New Phone",
+  "title_en": "Grandpa’s New Phone",
+  "level": "A1 English Learners",
+  "narrator": "Диктор",
+  "durationMin": 14,
+  "description": "A warm story about learning a new smartphone.",
+  "cover": "cover.jpg",
+  "textFile": "book.txt"
+}
