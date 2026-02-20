@@ -1,0 +1,12 @@
+{
+  "id": "space-basics",
+  "series": "SCIENCE",
+  "title_ua": "Space Basics",
+  "title_en": "Space Basics",
+  "level": "A2 English Learners",
+  "narrator": "Диктор",
+  "durationMin": 14,
+  "description": "Planets, stars, and simple space words.",
+  "cover": "cover.jpg",
+  "textFile": "book.txt"
+}
