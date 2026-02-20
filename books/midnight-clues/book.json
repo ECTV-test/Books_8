@@ -1,0 +1,12 @@
+{
+  "id": "midnight-clues",
+  "series": "DETECTIVES",
+  "title_ua": "Midnight Clues",
+  "title_en": "Midnight Clues",
+  "level": "B1 English Learners",
+  "narrator": "Диктор",
+  "durationMin": 18,
+  "description": "A detective story in the city.",
+  "cover": "cover.jpg",
+  "textFile": "book.txt"
+}

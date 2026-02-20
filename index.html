@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Book Reader Prototype</title>
+
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body data-theme="light">
+  <div id="app"></div>
+
+  <!-- Translation popover -->
+  <div id="popover" class="popover" role="dialog" aria-hidden="true">
+    <div class="popRow">
+      <div class="popWord" id="popWord">word</div>
+      <div class="popMiniBtns">
+        <button class="miniBtn" id="popBookmark" title="Bookmark">🔖</button>
+        <button class="miniBtn" id="popSpeak" title="Speak">🔊</button>
+      </div>
+    </div>
+    <div class="popTrans" id="popTrans">translation</div>
+    <div class="popActions">
+      <button class="popPlay" id="popPlayFromHere" title="Play from here">Play from here</button>
+    </div>
+  </div>
+
+  <!-- Sheet backdrop -->
+  <div id="sheetBackdrop" class="sheetBackdrop" aria-hidden="true"></div>
+
+  <!-- Settings (User) -->
+  <div id="settings" class="sheet" aria-hidden="true">
+    <div class="sheetHandle" aria-hidden="true"></div>
+    <div class="setHead">
+      <div class="setTitle">Налаштування</div>
+      <button class="miniBtn" id="setClose">✕</button>
+    </div>
+
+    <div class="sheetTabs" role="tablist" aria-label="Settings tabs">
+      <button class="sheetTab active" id="setTabRead" role="tab" aria-selected="true">Текст</button>
+      <button class="sheetTab" id="setTabListen" role="tab" aria-selected="false">Аудио</button>
+    </div>
+
+    <div id="setPaneRead" class="sheetPane" role="tabpanel">
+      <div class="row">
+        <div>
+          <div><b>Мова перекладу</b></div>
+          <small>LibreTranslate target</small>
+        </div>
+        <select id="targetLang"></select>
+      </div>
+
+      <div class="row">
+        <div>
+          <div><b>Розмір тексту</b></div>
+          <small>A− / A+</small>
+        </div>
+        <div class="seg">
+          <button id="fontMinus">A−</button>
+          <button id="fontPlus">A+</button>
+        </div>
+      </div>
+
+      <div class="row">
+        <div>
+          <div><b>Колір підсвітки</b></div>
+          <small>Default / Yellow</small>
+        </div>
+        <div class="seg">
+          <button id="hlDefault" class="active">Default</button>
+          <button id="hlYellow">Yellow</button>
+        </div>
+      </div>
+
+      <div class="row" id="rowTapTranslate">
+        <div>
+          <div><b>Переклад</b></div>
+          <small>по кліку / тапу</small>
+        </div>
+        <div class="toggle on" id="tTranslation"><div class="knob"></div></div>
+      </div>
+
+      <div class="row" id="rowLineTranslate" style="display:none">
+        <div>
+          <div><b>Переклад рядком</b></div>
+          <small>показувати під текстом</small>
+        </div>
+        <div class="toggle on" id="tLineTranslation"><div class="knob"></div></div>
+      </div>
+
+      <div class="row">
+        <div>
+          <div><b>Тема</b></div>
+          <small>нічний режим</small>
+        </div>
+        <div class="toggle" id="tNight"><div class="knob"></div></div>
+      </div>
+
+      <div class="row">
+        <div>
+          <div><b>Підсвітка</b></div>
+          <small>активний рядок</small>
+        </div>
+        <div class="toggle on" id="tHighlight"><div class="knob"></div></div>
+      </div>
+
+      <div class="row">
+        <div>
+          <div><b>Поміняти мови</b></div>
+          <small>лише режим “Читати”</small>
+        </div>
+        <div class="toggle" id="tSwap"><div class="knob"></div></div>
+      </div>
+    </div>
+
+    <div id="setPaneListen" class="sheetPane" role="tabpanel" style="display:none">
+      <div class="row">
+        <div>
+          <div><b>Стать голосу</b></div>
+          <small>чоловічий / жіночий</small>
+        </div>
+        <div class="seg">
+          <button id="uMale">Чоловічий</button>
+          <button id="uFemale">Жіночий</button>
+        </div>
+      </div>
+
+      <div class="row">
+        <div>
+          <div><b>Швидкість читання</b></div>
+          <small id="speedLabel">1.0×</small>
+        </div>
+        <div class="seg">
+          <button id="uSpeedSlow">Повільно</button>
+          <button id="uSpeedNormal">Нормально</button>
+          <button id="uSpeedFast">Швидко</button>
+        </div>
+      </div>
+
+      <!-- keep slider for fine-tuning (hidden in UI) -->
+      <input id="speed" class="range" type="range" min="0.3" max="2.0" step="0.05" value="1.0" style="display:none">
+
+      <div class="hint" style="padding-top:6px">
+        Нормальна швидкість — це поточне значення (100).
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Dev settings (Адмін) -->
+  <div id="devPanel" class="sheet" aria-hidden="true">
+    <div class="sheetHandle" aria-hidden="true"></div>
+    <div class="setHead">
+      <div class="setTitle">Dev / Адмін</div>
+      <button class="miniBtn" id="devClose">✕</button>
+    </div>
+
+    <div class="row">
+      <div>
+        <div><b>Провайдер перекладу</b></div>
+        <small>для перекладу рядків</small>
+      </div>
+      <div class="seg">
+        <button id="provLibre">Libre</button>
+        <button id="provOpenAI">OpenAI</button>
+      </div>
+    </div>
+
+    <div class="row">
+      <div>
+        <div><b>Стать голосу</b></div>
+        <small>чоловічий / жіночий</small>
+      </div>
+      <div class="seg">
+        <button id="vMale">Чоловічий</button>
+        <button id="vFemale">Жіночий</button>
+      </div>
+    </div>
+
+    <div class="row">
+      <div>
+        <div><b>Голос</b></div>
+        <small>вбудовані OpenAI</small>
+      </div>
+      <select id="ttsVoiceSelect"></select>
+    </div>
+
+    <div class="row" style="align-items:flex-start">
+      <div style="min-width:140px">
+        <div><b>Промпт голосу</b></div>
+        <small>інструкції</small>
+      </div>
+      <textarea id="ttsInstructions" style="width:100%;min-height:86px;border:1px solid var(--line);border-radius:12px;padding:10px;background:var(--card);color:var(--text);font-weight:700;resize:vertical"></textarea>
+    </div>
+
+    <div class="row">
+      <div>
+        <div><b>Без кешу</b></div>
+        <small>ігнорувати кеш Worker</small>
+      </div>
+      <div class="toggle" id="tNoCache"><div class="knob"></div></div>
+    </div>
+
+    <div class="ctaRow" style="margin-top:6px">
+      <button class="btn btnGhost" id="btnClearTts">🧹 Очистити кеш озвучення</button>
+      <button class="btn btnGhost" id="btnClearTr">🧹 Очистити кеш перекладу</button>
+    </div>
+
+    <div class="hint" style="padding-top:10px">
+      Переклад: <b>LibreTranslate</b> (публічний сервіс). Якщо бачиш <b>429</b> — це ліміт. Код ставить паузу і просить зачекати.
+      <br/><br/>
+      Для безпеки ключ OpenAI зберігається у Worker (secret). GitHub Pages залишається статичним.
+    </div>
+  </div>
+
+  
+
+  <div id="chaptersSheet" class="sheet" aria-hidden="true">
+    <div class="sheetHandle" aria-hidden="true"></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px 6px;">
+      <div style="font-weight:900;letter-spacing:.2px">Chapters</div>
+      <button class="btn" id="chaptersClose" style="padding:8px 12px">Close</button>
+    </div>
+    <div id="chaptersList" style="padding:6px 12px 18px;display:flex;flex-direction:column;gap:8px;"></div>
+  </div>
+<!-- Bottom player -->
+  <div id="player" class="playerBar" style="display:none">
+    <div class="playerInner">
+      <div>
+        <div class="progTop">
+          <div class="progTitle" id="pTitle">Reader</div>
+          <div class="progMeta"><span id="pPct">0%</span></div>
+        </div>
+        <div class="bar"><div id="pFill"></div></div>
+      </div>
+      <div class="controls">
+        <button class="iconBtn" id="btnChapters" title="Chapters">≡</button>
+        <button class="iconBtn" id="btnBack" title="Back">←</button>
+        <button class="iconBtn" id="btnStart" title="To start">⟲</button>
+        <button class="playBtn" id="btnPlay" title="Play/Pause">▶</button>
+
+        <div class="modeSwitch" id="modeSwitch">
+          <button class="modeBtn" id="modeListen" title="Listen" aria-label="Listen">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M12 3a7 7 0 0 0-7 7v4a4 4 0 0 0 4 4h1V8H9a5 5 0 0 1 10 0h-1v10h1a4 4 0 0 0 4-4v-4a7 7 0 0 0-7-7z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <button class="modeBtn" id="modeRead" title="Read" aria-label="Read">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M7 4h10a2 2 0 0 1 2 2v13H7a2 2 0 0 0-2 2V6a2 2 0 0 1 2-2z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+              <path d="M7 4v15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+<script src="js/core.js" defer></script>
+<script src="js/app.js" defer></script>
+</body>
+</html>
