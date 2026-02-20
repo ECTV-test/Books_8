@@ -1,0 +1,12 @@
+{
+  "id": "brave-new-world",
+  "series": "FANTASY",
+  "title_ua": "Brave New World",
+  "title_en": "Brave New World",
+  "level": "B1 English Learners",
+  "narrator": "Диктор",
+  "durationMin": 25,
+  "description": "A classic dystopian future.",
+  "cover": "cover.jpg",
+  "textFile": "book.txt"
+}
