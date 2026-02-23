@@ -1424,6 +1424,13 @@ if(route.name === "details"){
 
       try{ clearAllWordHighlights(); }catch(e){}
       setCursorIndex(idx, {syncUI:true, scroll:true});
+      // Autoplay for bookmarks "Play"
+try{
+  if(state.route?.autoPlay){
+    state.route.autoPlay = false;
+    setTimeout(()=>{ try{ startReading(); }catch(e){} }, 80);
+  }
+}catch(e){}
     });
   }
 
@@ -1958,39 +1965,55 @@ function renderLibrary(){
     el.addEventListener("click", ()=>go({name:"details", bookId: el.dataset.open}));
   });
 
-  // bookmark buttons (play / go / delete)
-  if(tab==="bookmarks"){
-    app.querySelectorAll("[data-bm-play]").forEach(btn=>{
-      btn.addEventListener("click", (e)=>{
-        e.preventDefault();
-        e.stopPropagation();
-        const [bookId, entryId] = String(btn.dataset.bmPlay||"").split("::");
-        const list = loadBookmarks(bookId);
-        const it = list.find(x=>x && x.id===entryId);
-        if(it) playOneShotTTS(it.raw || it.tr || "");
-      });
+  // Bookmarks tab: Play / Go / Delete
+if(tab==="bookmarks"){
+  app.querySelectorAll("[data-bm-play]").forEach(btn=>{
+    btn.addEventListener("click", (e)=>{
+      e.preventDefault(); e.stopPropagation();
+      const [bookId, entryId] = String(btn.dataset.bmPlay||"").split("::");
+      const it = loadBookmarks(bookId).find(x=>x && x.id===entryId);
+      if(!it) return;
+
+      const idx = Number.isFinite(it.lineIndex) ? Number(it.lineIndex) : Number(it.paraIdx||0);
+
+      // set context (level + langs) from bookmark
+      state.reading.level = normalizeLevel(it.level || state.reading.level || "original");
+      state.reading.sourceLang = (it.sourceLang || state.reading.sourceLang || "en");
+      state.reading.targetLang = (it.targetLang || state.reading.targetLang || "uk");
+
+      // Play = LISTEN
+      go({name:"reader", bookId, startIndex: idx, forceStartIndex:true, autoPlay:true});
     });
-    app.querySelectorAll("[data-bm-go]").forEach(btn=>{
-      btn.addEventListener("click", (e)=>{
-        e.preventDefault();
-        e.stopPropagation();
-        const [bookId, entryId] = String(btn.dataset.bmGo||"").split("::");
-        const list = loadBookmarks(bookId);
-        const it = list.find(x=>x && x.id===entryId);
-        const idx = Number(it?.paraIdx||0);
-        go({name:"reader", bookId, startPara: idx});
-      });
+  });
+
+  app.querySelectorAll("[data-bm-go]").forEach(btn=>{
+    btn.addEventListener("click", (e)=>{
+      e.preventDefault(); e.stopPropagation();
+      const [bookId, entryId] = String(btn.dataset.bmGo||"").split("::");
+      const it = loadBookmarks(bookId).find(x=>x && x.id===entryId);
+      if(!it) return;
+
+      const idx = Number.isFinite(it.lineIndex) ? Number(it.lineIndex) : Number(it.paraIdx||0);
+
+      // set context (level + langs) from bookmark
+      state.reading.level = normalizeLevel(it.level || state.reading.level || "original");
+      state.reading.sourceLang = (it.sourceLang || state.reading.sourceLang || "en");
+      state.reading.targetLang = (it.targetLang || state.reading.targetLang || "uk");
+
+      // Go = READ
+      go({name:"bireader", bookId, startIndex: idx, forceStartIndex:true});
     });
-    app.querySelectorAll("[data-bm-del]").forEach(btn=>{
-      btn.addEventListener("click", (e)=>{
-        e.preventDefault();
-        e.stopPropagation();
-        const [bookId, entryId] = String(btn.dataset.bmDel||"").split("::");
-        removeBookmarkEntry(bookId, entryId);
-        renderLibrary();
-      });
+  });
+
+  app.querySelectorAll("[data-bm-del]").forEach(btn=>{
+    btn.addEventListener("click", (e)=>{
+      e.preventDefault(); e.stopPropagation();
+      const [bookId, entryId] = String(btn.dataset.bmDel||"").split("::");
+      removeBookmarkEntry(bookId, entryId);
+      renderLibrary();
     });
-  }
+  });
+}
 }
 
 
