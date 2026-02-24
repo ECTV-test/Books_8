@@ -1,0 +1,82 @@
+[
+  {
+    "id": "grandpas-new-phone",
+    "series": "NEW",
+    "title_ua": "Grandpa’s New Phone",
+    "title_en": "Grandpa’s New Phone",
+    "level": "A1 English Learners",
+    "durationMin": 14
+  },
+  {
+    "id": "match-made-in-mistake",
+    "series": "NEW",
+    "title_ua": "Match Made in Mistake",
+    "title_en": "Match Made in Mistake",
+    "level": "A2 English Learners",
+    "durationMin": 18
+  },
+  {
+    "id": "invisible-sandwich",
+    "series": "NEW",
+    "title_ua": "The Invisible Sandwich",
+    "title_en": "The Invisible Sandwich",
+    "level": "A1 English Learners",
+    "durationMin": 12
+  },
+  {
+    "id": "the-secret-door-in-the-tree",
+    "series": "NEW",
+    "title_ua": "The Secret Door in the Tree",
+    "title_en": "The Secret Door in the Tree",
+    "level": "A2 English Learners",
+    "durationMin": 16
+  },
+  {
+    "id": "brave-new-world",
+    "series": "FANTASY",
+    "title_ua": "Brave New World",
+    "title_en": "Brave New World",
+    "level": "B1 English Learners",
+    "durationMin": 25
+  },
+  {
+    "id": "whispering-pines",
+    "series": "FANTASY",
+    "title_ua": "Whispering Pines",
+    "title_en": "Whispering Pines",
+    "level": "B1 English Learners",
+    "durationMin": 20
+  },
+  {
+    "id": "midnight-clues",
+    "series": "DETECTIVES",
+    "title_ua": "Midnight Clues",
+    "title_en": "Midnight Clues",
+    "level": "B1 English Learners",
+    "durationMin": 18
+  },
+  {
+    "id": "the-case-of-the-missing-sandwich",
+    "series": "DETECTIVES",
+    "title_ua": "The Case of the Missing Sandwich",
+    "title_en": "The Case of the Missing Sandwich",
+    "level": "A2 English Learners",
+    "durationMin": 12
+  },
+  {
+    "id": "simple-science-light-and-sound",
+    "series": "SCIENCE",
+    "title_ua": "Simple Science: Light and Sound",
+    "title_en": "Simple Science: Light and Sound",
+    "level": "A2 English Learners",
+    "durationMin": 15
+  },
+  {
+    "id": "space-basics",
+    "series": "SCIENCE",
+    "title_ua": "Space Basics",
+    "title_en": "Space Basics",
+    "level": "A2 English Learners",
+    "durationMin": 14
+  }
+]
