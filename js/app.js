@@ -1,4 +1,4 @@
-(function(){
+ (function(){
   function showCrash(title, msg, stack){
     try{
       var el=document.getElementById('app_crash_overlay');
@@ -320,7 +320,7 @@ function addBookmarkFromPopover(){
     const sLang = String(state.reading?.sourceLang || state.book?.sourceLang || "en").trim().toLowerCase();
     const tLang = String(state.reading?.targetLang || "uk").trim().toLowerCase();
     const m = pkgMode(state.route?.name);
-    addBookmarkEntry({bookId, paraIdx: popCtx.paraIdx || 0, raw, tr, sourceLang: sLang, targetLang: tLang, mode: m});
+    addBookmarkEntry({bookId, paraIdx: popCtx.paraIdx || 0, raw, tr, sourceLang: sLang, targetLang: tLang, mode: m, wordIndex: Number(popCtx.wordIndex ?? -1), wordKey: String(popCtx.wordKey||"")});
 
     // quick UI feedback
     if(popBookmark){
@@ -600,6 +600,24 @@ function jumpToChapter(chIdx){
 
     // Jump inside active reading screen
           setCursorIndex(idx, {syncUI:true, scroll:true});
+      // Apply bookmark word highlight if provided
+      try{
+        const wi = Number(state.route?.startWordIndex);
+        if(Number.isFinite(wi) && wi >= 0){
+          setActiveParaWord(idx, wi);
+          const wEl = state.reading.paraWords?.[idx]?.[wi];
+          if(wEl && wEl.getBoundingClientRect){
+            const r = wEl.getBoundingClientRect();
+            const topZone = window.innerHeight * 0.25;
+            const botZone = window.innerHeight * 0.75;
+            if(r.top < topZone || r.bottom > botZone){
+              window.scrollBy({top: (r.top - window.innerHeight/2), behavior:"smooth"});
+            }
+          }
+        }
+        try{ delete state.route.startWordIndex; }catch(e){}
+      }catch(e){}
+
       // Autoplay for bookmarks "Play"
       try{ if(state.route?.autoPlay){ try{ state.route.autoPlay=false; }catch(e){}; setTimeout(()=>{ try{ startReading(); }catch(e){} }, 80); } }catch(e){}
 
@@ -1188,7 +1206,7 @@ function saveBookmarks(bookId, arr){
     try{ sessionStorage.setItem(bmKey(bookId), JSON.stringify(arr||[])); }catch(_e){}
   }
 }
-function addBookmarkEntry({bookId, paraIdx, raw, tr, lineIndex, level, sourceLang, targetLang, mode}){
+function addBookmarkEntry({bookId, paraIdx, raw, tr, lineIndex, level, sourceLang, targetLang, mode, wordIndex, wordKey}){
   if(!bookId) return;
   const r = String(raw||"").trim();
   const t = String(tr||"").trim();
@@ -1202,6 +1220,8 @@ function addBookmarkEntry({bookId, paraIdx, raw, tr, lineIndex, level, sourceLan
     sourceLang: String(sourceLang||"").trim().toLowerCase(),
     targetLang: String(targetLang||"").trim().toLowerCase(),
     mode: String(mode||"read"),
+    wordIndex: Number.isFinite(wordIndex) ? Number(wordIndex) : -1,
+    wordKey: String(wordKey||""),
     raw: r,
     tr: t,
     createdAt: Date.now()
@@ -1262,7 +1282,7 @@ function _bmOpenFromEntry(bookId, entry, play){
   try{ state.reading.sourceLang = src; }catch(e){}
   try{ state.reading.targetLang = trg; }catch(e){}
   const routeName = (mode==="listen") ? "reader" : "bireader";
-  go({name: routeName, bookId: bookId, startIndex: idx, forceStartIndex: true, autoPlay: !!play});
+  go({name: routeName, bookId: bookId, startIndex: idx, forceStartIndex: true, autoPlay: !!play, startWordIndex: (Number.isFinite(entry.wordIndex) && entry.wordIndex>=0) ? Number(entry.wordIndex) : undefined});
 }
 function showBookBookmarksSheet(bookId){
   bookId = bookId || state.book?.id || state.route?.bookId;
@@ -1978,7 +1998,7 @@ function renderLibrary(){
         const list = loadBookmarks(bookId);
         const it = list.find(x=>x && x.id===entryId);
         const idx = Number(it?.paraIdx||0);
-        go({name:"reader", bookId, startPara: idx});
+        go({name:"reader", bookId, startIndex: idx, forceStartIndex:true, startWordIndex: (it && Number.isFinite(it.wordIndex) && it.wordIndex>=0) ? Number(it.wordIndex) : undefined});
       });
     });
     app.querySelectorAll("[data-bm-del]").forEach(btn=>{
@@ -2296,6 +2316,22 @@ function renderReader(){
       // highlight + scroll
       try{ clearActivePara(); }catch(e){}
       try{ setActivePara(sp); }catch(e){}
+      // If bookmark targets a specific word, highlight it
+      try{
+        const wi = Number(state.route.startWordIndex);
+        if(Number.isFinite(wi) && wi >= 0){
+          setActiveParaWord(sp, wi);
+          const wEl = state.reading.paraWords?.[sp]?.[wi];
+          if(wEl && wEl.getBoundingClientRect){
+            const r = wEl.getBoundingClientRect();
+            const topZone = window.innerHeight * 0.25;
+            const botZone = window.innerHeight * 0.75;
+            if(r.top < topZone || r.bottom > botZone){
+              window.scrollBy({top: (r.top - window.innerHeight/2), behavior:"smooth"});
+            }
+          }
+        }
+      }catch(e){}
       setTimeout(()=>{ try{ scrollToPara(sp); }catch(e){} }, 80);
       // consume once
       try{ delete state.route.startPara; }catch(e){}
@@ -3032,7 +3068,17 @@ async function showTranslation(span){
     const pEl = span.closest(".para[data-para]");
     const pIdx = pEl ? Number(pEl.dataset.para) : 0;
     popCtx = { bookId: state.book?.id || state.route?.bookId, paraIdx: Number.isFinite(pIdx) ? pIdx : 0, raw, tr: "" };
-  }catch(e){ popCtx = { bookId: state.book?.id || state.route?.bookId, paraIdx: 0, raw, tr:"" }; }
+  
+    // capture word position for precise bookmark jump
+    try{
+      const list = state.reading.paraWords?.[Number.isFinite(pIdx)?pIdx:0] || [];
+      const wi = list.indexOf(span);
+      if(popCtx){
+        popCtx.wordIndex = (wi >= 0) ? wi : -1;
+        popCtx.wordKey = span.dataset.key || normalizeWord(raw);
+      }
+    }catch(_e){}
+}catch(e){ popCtx = { bookId: state.book?.id || state.route?.bookId, paraIdx: 0, raw, tr:"" }; }
 
   // Listen mode: pause narration while popover is open
   try{
