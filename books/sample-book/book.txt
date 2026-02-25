@@ -1,6 +1,0 @@
-Demo Book
-
-Chapter 1: Hello
-
-This is a short demo paragraph.
-Add more lines to book.txt to grow the text.
