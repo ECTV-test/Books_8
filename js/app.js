@@ -104,7 +104,7 @@ const FLAG_BY_LANG = {
   pl: "🇵🇱",
   de: "🇩🇪",
   es: "🇪🇸",
-  fr: "🇫🇷"
+  fr: "🇫🇷",
   it: "🇮🇹",
   pt: "🇵🇹",
 };
