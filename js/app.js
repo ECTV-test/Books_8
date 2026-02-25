@@ -2086,7 +2086,7 @@ function showBookBookmarksSheet(bookId){
         <div class="bmSheetTitle">${escapeHtml(b.title_en || b.title_ua || "Bookmarks")}</div>
         <div class="bmSheetBtns">
           <button class="bmSheetBtn" id="bmAddBtn" title="Add bookmark">＋</button>
-          <button class="bmSheetBtn" id="bmAllBtn" title="${t('all_bookmarks_title\')}">${t(\'btn_all\')}</button>
+          <button class="bmSheetBtn" id="bmAllBtn" title="${t('all_bookmarks_title')}">${t('btn_all')}</button>
           <button class="bmSheetBtn" id="bmCloseBtn" title="Close">✕</button>
         </div>
       </div>
