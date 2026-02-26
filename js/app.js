@@ -1222,6 +1222,59 @@ body[data-theme="night"] .bmLineMark .lineCardBtn::after{
 /* Mobile: prevent title/meta overlap in Bookmarks list */
 @media (max-width: 520px){
   .bmTitleRow{ flex-wrap: wrap !important; gap: 8px !important; }
+/* --- Mobile layout: My Library cards (prevent text overlap) --- */
+@media (max-width: 520px){
+  .libraryItem{
+    position: relative !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 10px !important;
+    padding: 16px 14px 18px !important;
+    border-radius: 28px !important;
+  }
+  .libraryItem .coverImg{
+    width: 132px !important;
+    height: 132px !important;
+    flex: 0 0 auto !important;
+    border-radius: 28px !important;
+    overflow: hidden !important;
+  }
+  .libraryItem .coverImg img{
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+  }
+  .libraryItem .title{
+    font-size: 30px !important;
+    line-height: 1.05 !important;
+    text-align: center !important;
+    margin: 2px 0 0 !important;
+  }
+  .libraryItem .meta{
+    text-align: center !important;
+    margin: 4px 0 0 !important;
+  }
+  .libraryItem .pkgRow{
+    width: 100% !important;
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    margin-top: 10px !important;
+  }
+  .libraryItem .pkgChip{
+    max-width: 100% !important;
+    white-space: nowrap !important;
+  }
+  .libraryItem .circle{
+    position: absolute !important;
+    top: 14px !important;
+    right: 14px !important;
+    transform: none !important;
+  }
+}
+
   .bmTitle{ max-width: 100% !important; }
   .bmMeta{ margin-top: 4px !important; }
 }
@@ -1390,61 +1443,29 @@ body:not([data-theme="night"]) .xBtn{
   .formRow > *{ max-width: 100% !important; }
 }
 
-
-/* --- Mobile: Library cards (My Library) layout --- */
-@media (max-width: 520px){
-  .libraryItem{
-    position: relative !important;
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: stretch !important;
-    padding: 14px 14px 16px !important;
-    gap: 10px !important;
-  }
-  .libraryItem .coverImg{
-    width: 140px !important;
-    height: auto !important;
-    margin: 0 auto !important;
-    flex: 0 0 auto !important;
-  }
-  .libraryItem .coverImg img{
-    width: 100% !important;
-    height: auto !important;
-    display: block !important;
-    border-radius: 22px !important;
-  }
-  .libraryItem .circle{
-    position: absolute !important;
-    top: 14px !important;
-    right: 14px !important;
-    margin: 0 !important;
-  }
-  .libraryItem > div[style*="flex:1"]{
-    width: 100% !important;
-    min-width: 0 !important;
-  }
-  .libraryItem .title{
-    text-align: center !important;
-    margin: 2px 0 0 !important;
-    line-height: 1.05 !important;
-    letter-spacing: -0.02em !important;
-  }
-  .libraryItem .meta{
-    text-align: center !important;
-    margin: 4px 0 0 !important;
-    line-height: 1.1 !important;
-  }
-  .libraryItem .pkgRow{
-    justify-content: center !important;
-    flex-wrap: wrap !important;
-    gap: 8px !important;
-    margin-top: 10px !important;
-  }
-  .libraryItem .pkgChip{
-    max-width: 100% !important;
-    white-space: nowrap !important;
-  }
+/* --- Close (X) button readability (light & night) --- */
+.sheetClose, .closeBtn, .xBtn, .bmClose{
+  -webkit-backdrop-filter: blur(14px) saturate(130%);
+  backdrop-filter: blur(14px) saturate(130%);
 }
+body:not([data-theme="night"]) .sheetClose, 
+body:not([data-theme="night"]) .closeBtn,
+body:not([data-theme="night"]) .xBtn,
+body:not([data-theme="night"]) .bmClose{
+  background: rgba(255,255,255,.88) !important;
+  border: 1px solid rgba(20,24,28,.12) !important;
+  color: rgba(20,24,28,.92) !important;
+  text-shadow: none !important;
+}
+body[data-theme="night"] .sheetClose,
+body[data-theme="night"] .closeBtn,
+body[data-theme="night"] .xBtn,
+body[data-theme="night"] .bmClose{
+  background: rgba(255,255,255,.16) !important;
+  border: 1px solid rgba(255,255,255,.12) !important;
+  color: rgba(255,255,255,.92) !important;
+}
+
 `;
     document.head.appendChild(st);
   }catch(e){}
@@ -6006,6 +6027,8 @@ document.addEventListener("click", (e)=>{
    Init
 --------------------------- */
 (function init(){
+  // Ensure theme patch is applied before first render (fix missing frames before entering book)
+  try{ ensureThemePatch(); requestAnimationFrame(()=>ensureThemePatch()); setTimeout(()=>ensureThemePatch(),50); }catch(e){}
   TARGET_LANGS.forEach(l=>{
     const opt = document.createElement("option");
     opt.value = l.code;
