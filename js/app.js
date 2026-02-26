@@ -1158,6 +1158,37 @@ body[data-theme="night"] .listenTop{
   background: rgba(255,255,255,.10) !important;
   border-bottom: 1px solid rgba(255,255,255,.08) !important;
 }
+
+
+/* --- v2 fixes: bookmark indicators visibility + mobile layout --- */
+
+/* Bookmark indicators (night): style whichever pseudo is used (do NOT create new content) */
+body[data-theme="night"] .bmWordMark{
+  filter: drop-shadow(0 0 6px rgba(120,200,255,.18));
+}
+body[data-theme="night"] .bmWordMark::before,
+body[data-theme="night"] .bmWordMark::after{
+  background: rgba(255,255,255,.92) !important;
+  opacity: 1 !important;
+  box-shadow: 0 0 0 2px rgba(0,0,0,.35), 0 0 10px rgba(120,200,255,.22) !important;
+}
+
+/* Line-bookmark shelf + button highlight (night) */
+body[data-theme="night"] .bmLineMark .lineCardBtn{
+  box-shadow: 0 0 0 2px rgba(120,200,255,.18), 0 6px 18px rgba(0,0,0,.25) !important;
+}
+body[data-theme="night"] .bmLineMark .lineCardBtn::before,
+body[data-theme="night"] .bmLineMark .lineCardBtn::after{
+  background: rgba(255,255,255,.62) !important;
+  opacity: 1 !important;
+}
+
+/* Mobile: prevent title/meta overlap in Bookmarks list */
+@media (max-width: 520px){
+  .bmTitleRow{ flex-wrap: wrap !important; gap: 8px !important; }
+  .bmTitle{ max-width: 100% !important; }
+  .bmMeta{ margin-top: 4px !important; }
+}
 `;
     document.head.appendChild(st);
   }catch(e){}
