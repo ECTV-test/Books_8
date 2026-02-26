@@ -1390,6 +1390,61 @@ body:not([data-theme="night"]) .xBtn{
   .formRow > *{ max-width: 100% !important; }
 }
 
+
+/* --- Mobile: Library cards (My Library) layout --- */
+@media (max-width: 520px){
+  .libraryItem{
+    position: relative !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    padding: 14px 14px 16px !important;
+    gap: 10px !important;
+  }
+  .libraryItem .coverImg{
+    width: 140px !important;
+    height: auto !important;
+    margin: 0 auto !important;
+    flex: 0 0 auto !important;
+  }
+  .libraryItem .coverImg img{
+    width: 100% !important;
+    height: auto !important;
+    display: block !important;
+    border-radius: 22px !important;
+  }
+  .libraryItem .circle{
+    position: absolute !important;
+    top: 14px !important;
+    right: 14px !important;
+    margin: 0 !important;
+  }
+  .libraryItem > div[style*="flex:1"]{
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+  .libraryItem .title{
+    text-align: center !important;
+    margin: 2px 0 0 !important;
+    line-height: 1.05 !important;
+    letter-spacing: -0.02em !important;
+  }
+  .libraryItem .meta{
+    text-align: center !important;
+    margin: 4px 0 0 !important;
+    line-height: 1.1 !important;
+  }
+  .libraryItem .pkgRow{
+    justify-content: center !important;
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+    margin-top: 10px !important;
+  }
+  .libraryItem .pkgChip{
+    max-width: 100% !important;
+    white-space: nowrap !important;
+  }
+}
 `;
     document.head.appendChild(st);
   }catch(e){}
