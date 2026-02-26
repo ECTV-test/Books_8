@@ -1072,6 +1072,22 @@ body[data-theme="night"] .sectionLabel,
 body[data-theme="night"] .muted,
 body[data-theme="night"] .subtle{ color: var(--appMuted) !important; }
 
+/* My Library (In progress / Finished) cards: same framed glass as Home card */
+.libraryItem{
+  -webkit-backdrop-filter: blur(18px) saturate(120%);
+  backdrop-filter: blur(18px) saturate(120%);
+}
+body[data-theme="night"] .libraryItem{
+  background: var(--appCardSolid) !important;
+  border: 1px solid rgba(255,255,255,.10) !important;
+  box-shadow: none !important;
+  color: var(--appText) !important;
+}
+body:not([data-theme="night"]) .libraryItem{
+  background: rgba(255,255,255,.62) !important;
+  border: 1px solid rgba(20,24,28,.08) !important;
+}
+
 /* Tabs (Books / My Library) readability */
 body[data-theme="night"] .appHeader .tab{ color: var(--appText) !important; }
 body[data-theme="night"] .appHeader .tab.muted{ color: var(--appMuted) !important; }
@@ -1101,8 +1117,7 @@ body[data-theme="night"] .segBtn.active{ background: var(--appBtn2); }
 
 /* Bookmark chip markers / line markers */
 body[data-theme="night"] .mark,
-body[data-theme="night"] .chip,
-body[data-theme="night"] .badge{
+body[data-theme="night"] .chip{
   background: rgba(0,0,0,.18);
   color: var(--appText);
   border: 1px solid rgba(255,255,255,.08);
@@ -1211,20 +1226,40 @@ body[data-theme="night"] .bmLineMark .lineCardBtn::after{
   .bmMeta{ margin-top: 4px !important; }
 }
 
-/* --- v3.1: progress chips + details chips styled like bookmarks (night) --- */
+/* --- v3.1: progress chips (keep simple — no extra frames) --- */
 body[data-theme="night"] .pkgChip{
-  background: rgba(255,255,255,.10) !important;
-  border: 1px solid rgba(255,255,255,.14) !important;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 10px 24px rgba(0,0,0,.20) !important;
+  background: rgba(255,255,255,.08) !important;
+  border: none !important;
+  box-shadow: none !important;
   color: var(--appText) !important;
-  font-weight: 800 !important;
+  font-weight: 750 !important;
 }
 body[data-theme="night"] .pkgChip .sep{ opacity: .55 !important; }
 body[data-theme="night"] .pkgChip .lvl{
-  background: rgba(255,255,255,.14) !important;
-  border: 1px solid rgba(255,255,255,.14) !important;
+  background: transparent !important;
+  border: none !important;
   color: var(--appText) !important;
-  font-weight: 900 !important;
+  font-weight: 800 !important;
+  padding: 0 !important;
+  margin-right: 6px !important;
+}
+
+/* Details screen cards: match bookmarks "glass" tone */
+body[data-theme="night"] .formCard{
+  background: var(--appCardSolid) !important;
+  border: 1px solid rgba(255,255,255,.08) !important;
+  box-shadow: none !important;
+}
+body:not([data-theme="night"]) .formCard{
+  background: rgba(255,255,255,.62) !important;
+  border: 1px solid rgba(20,24,28,.08) !important;
+}
+
+/* Popover bookmark button: filled when active (night) */
+body[data-theme="night"] #popBookmark.active{
+  background: rgba(255,255,255,.92) !important;
+  border-color: rgba(255,255,255,.0) !important;
+  color: rgba(10,14,18,.92) !important;
 }
 
 /* Details screen uses pills too; keep tone consistent */
