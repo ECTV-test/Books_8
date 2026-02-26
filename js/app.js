@@ -1210,6 +1210,43 @@ body[data-theme="night"] .bmLineMark .lineCardBtn::after{
   .bmTitle{ max-width: 100% !important; }
   .bmMeta{ margin-top: 4px !important; }
 }
+
+/* --- v3.1: progress chips + details chips styled like bookmarks (night) --- */
+body[data-theme="night"] .pkgChip{
+  background: rgba(255,255,255,.10) !important;
+  border: 1px solid rgba(255,255,255,.14) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 10px 24px rgba(0,0,0,.20) !important;
+  color: var(--appText) !important;
+  font-weight: 800 !important;
+}
+body[data-theme="night"] .pkgChip .sep{ opacity: .55 !important; }
+body[data-theme="night"] .pkgChip .lvl{
+  background: rgba(255,255,255,.14) !important;
+  border: 1px solid rgba(255,255,255,.14) !important;
+  color: var(--appText) !important;
+  font-weight: 900 !important;
+}
+
+/* Details screen uses pills too; keep tone consistent */
+body[data-theme="night"] .metaPill,
+body[data-theme="night"] .detailPill,
+body[data-theme="night"] .pill{
+  background: rgba(255,255,255,.10) !important;
+  border: 1px solid rgba(255,255,255,.12) !important;
+  color: var(--appText) !important;
+}
+
+/* --- v3.1: popover bookmark button fill in night when active --- */
+body[data-theme="night"] #popBookmark.active{
+  background: rgba(42,167,255,.32) !important;
+  border-color: rgba(42,167,255,.45) !important;
+  box-shadow: 0 10px 24px rgba(0,0,0,.25), inset 0 1px 0 rgba(255,255,255,.12) !important;
+}
+body[data-theme="night"] #popBookmark.active svg,
+body[data-theme="night"] #popBookmark.active span{
+  color: #e9f0ff !important;
+  fill: #e9f0ff !important;
+}
 `;
     document.head.appendChild(st);
   }catch(e){}
