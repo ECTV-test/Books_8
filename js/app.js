@@ -5238,7 +5238,81 @@ function _maybeShowBookmarkPlayChoice(){
     if(!(state.route?.name === "reader" || state.route?.name === "bireader")) return false;
     if(!state.book || String(state.book.id||"") !== String(pending.bookId||"")){ _clearPendingBookmarkPlayChoice(); return false; }
 
-    const curIdx = 
+    const curIdx = (function(){
+      try{ return _bmGetLineIndexFallback(); }catch(e){}
+      try{
+        if(state.route?.name==="reader") return Number(state.reading.activeParaIndex||0);
+        return Number(state.reading.activeBiLineIndex||0);
+      }catch(e){}
+      return 0;
+    })();
+
+    if(Number(curIdx) !== Number(pending.bookmarkIndex)){
+      // user moved away (chapter/back/etc) — don't show the choice anymore
+      _clearPendingBookmarkPlayChoice();
+      return false;
+    }
+
+    if(Number(pending.resumeIndex) === Number(pending.bookmarkIndex)){
+      _clearPendingBookmarkPlayChoice();
+      return false;
+    }
+
+    // Build a tiny modal (theme-aware)
+    const wrap = document.createElement("div");
+    wrap.style.position = "fixed";
+    wrap.style.inset = "0";
+    wrap.style.background = "rgba(0,0,0,.35)";
+    wrap.style.zIndex = "9999";
+    wrap.style.display = "flex";
+    wrap.style.alignItems = "center";
+    wrap.style.justifyContent = "center";
+    wrap.innerHTML = `
+      <div style="width:min(440px, calc(100vw - 36px));background:var(--card);color:var(--text);border-radius:18px;padding:16px 16px 14px;box-shadow:0 18px 60px rgba(0,0,0,.25);border:1px solid var(--line);">
+        <div style="font-weight:900;font-size:16px;letter-spacing:.2px;margin-bottom:10px;">${t("start_playback_title")}</div>
+        <div style="color:var(--muted);font-weight:700;font-size:13px;line-height:1.35;margin-bottom:14px;">
+          ${t("start_playback_desc")}
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <button id="bmChoiceContinue" class="bigBtn" style="width:100%;">${t("modal_continue")}</button>
+          <button id="bmChoiceBookmark" class="bigBtn secondary" style="width:100%;">${t("modal_start_bookmark")}</button>
+          <button id="bmChoiceCancel" class="pillBtn" style="width:100%;">${t("modal_cancel")}</button>
+        </div>
+      </div>`;
+    document.body.appendChild(wrap);
+
+    function close(){ try{ wrap.remove(); }catch(e){} }
+
+    wrap.addEventListener("click", (e)=>{ if(e.target===wrap) close(); });
+
+    const btnC = wrap.querySelector("#bmChoiceContinue");
+    const btnB = wrap.querySelector("#bmChoiceBookmark");
+    const btnX = wrap.querySelector("#bmChoiceCancel");
+
+    btnX.onclick = ()=>{ close(); };
+
+    btnB.onclick = ()=>{
+      _clearPendingBookmarkPlayChoice();
+      close();
+      startReading();
+    };
+
+    btnC.onclick = ()=>{
+      try{ stopReading({save:false}); }catch(e){}
+      try{ clearAllWordHighlights(); }catch(e){}
+      try{ setCursorIndex(Math.max(0, Number(pending.resumeIndex||0)), {syncUI:true, scroll:true}); }catch(e){}
+      _clearPendingBookmarkPlayChoice();
+      close();
+      startReading();
+    };
+
+    return true;
+  }catch(e){
+    return false;
+  }
+}
+
+/* --- UI patch v3 (glass + bookmarks markers) --- */
 function injectUiPatchV3(){
   try{
     if(document.getElementById("uiPatchV3")) return;
@@ -5364,79 +5438,6 @@ body:not(.night) .bmSheetItem{ border-color: rgba(0,0,0,.04); }
   }catch(e){}
 }
 
-(function(){
-      try{ return _bmGetLineIndexFallback(); }catch(e){}
-      try{
-        if(state.route?.name==="reader") return Number(state.reading.activeParaIndex||0);
-        return Number(state.reading.activeBiLineIndex||0);
-      }catch(e){}
-      return 0;
-    })();
-
-    if(Number(curIdx) !== Number(pending.bookmarkIndex)){
-      // user moved away (chapter/back/etc) — don't show the choice anymore
-      _clearPendingBookmarkPlayChoice();
-      return false;
-    }
-
-    if(Number(pending.resumeIndex) === Number(pending.bookmarkIndex)){
-      _clearPendingBookmarkPlayChoice();
-      return false;
-    }
-
-    // Build a tiny modal (theme-aware)
-    const wrap = document.createElement("div");
-    wrap.style.position = "fixed";
-    wrap.style.inset = "0";
-    wrap.style.background = "rgba(0,0,0,.35)";
-    wrap.style.zIndex = "9999";
-    wrap.style.display = "flex";
-    wrap.style.alignItems = "center";
-    wrap.style.justifyContent = "center";
-    wrap.innerHTML = `
-      <div style="width:min(440px, calc(100vw - 36px));background:var(--card);color:var(--text);border-radius:18px;padding:16px 16px 14px;box-shadow:0 18px 60px rgba(0,0,0,.25);border:1px solid var(--line);">
-        <div style="font-weight:900;font-size:16px;letter-spacing:.2px;margin-bottom:10px;">${t("start_playback_title")}</div>
-        <div style="color:var(--muted);font-weight:700;font-size:13px;line-height:1.35;margin-bottom:14px;">
-          ${t("start_playback_desc")}
-        </div>
-        <div style="display:flex;flex-direction:column;gap:10px;">
-          <button id="bmChoiceContinue" class="bigBtn" style="width:100%;">${t("modal_continue")}</button>
-          <button id="bmChoiceBookmark" class="bigBtn secondary" style="width:100%;">${t("modal_start_bookmark")}</button>
-          <button id="bmChoiceCancel" class="pillBtn" style="width:100%;">${t("modal_cancel")}</button>
-        </div>
-      </div>`;
-    document.body.appendChild(wrap);
-
-    function close(){ try{ wrap.remove(); }catch(e){} }
-
-    wrap.addEventListener("click", (e)=>{ if(e.target===wrap) close(); });
-
-    const btnC = wrap.querySelector("#bmChoiceContinue");
-    const btnB = wrap.querySelector("#bmChoiceBookmark");
-    const btnX = wrap.querySelector("#bmChoiceCancel");
-
-    btnX.onclick = ()=>{ close(); };
-
-    btnB.onclick = ()=>{
-      _clearPendingBookmarkPlayChoice();
-      close();
-      startReading();
-    };
-
-    btnC.onclick = ()=>{
-      try{ stopReading({save:false}); }catch(e){}
-      try{ clearAllWordHighlights(); }catch(e){}
-      try{ setCursorIndex(Math.max(0, Number(pending.resumeIndex||0)), {syncUI:true, scroll:true}); }catch(e){}
-      _clearPendingBookmarkPlayChoice();
-      close();
-      startReading();
-    };
-
-    return true;
-  }catch(e){
-    return false;
-  }
-}
 btnPlay.onclick = ()=>{
   if(!state.book) return;
   if(!state.reading.isPlaying){
