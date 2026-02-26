@@ -1,0 +1,16 @@
+{
+  "id": "invisible-sandwich",
+  "author": "English Club TV Group",
+  "series": "NEW",
+  "cover": "cover.jpg",
+  "textFile": "book.txt",
+  "title_en": "The Invisible Sandwich",
+  "title_uk": "Невидимий сендвіч",
+  "title_it": "Il Panino Invisibile",
+  "title_pt": "O Sanduíche Invisível",
+  "title_ru": "Невидимый сэндвич",
+  "title_pl": "Niewidzialna kanapka",
+  "title_de": "Das unsichtbare Sandwich",
+  "title_es": "El sándwich invisible",
+  "title_fr": "Le sandwich invisible"
+}
