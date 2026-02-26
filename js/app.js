@@ -1342,6 +1342,54 @@ body[data-theme="night"] #popBookmark.active i{
   padding: 0 !important;
 }
 
+
+
+/* --- Select (dropdown) styling: rounded corners + consistent glass in both themes --- */
+.sheet select, .dialog select, .panel select, .formCard select{
+  border-radius: 18px !important;
+  padding: 8px 14px !important;
+  outline: none !important;
+}
+body[data-theme="night"] .sheet select,
+body[data-theme="night"] .dialog select,
+body[data-theme="night"] .panel select,
+body[data-theme="night"] .formCard select{
+  background: rgba(0,0,0,.35) !important;
+  color: #fff !important;
+  border: 1px solid rgba(255,255,255,.18) !important;
+}
+body:not([data-theme="night"]) .sheet select,
+body:not([data-theme="night"]) .dialog select,
+body:not([data-theme="night"]) .panel select,
+body:not([data-theme="night"]) .formCard select{
+  background: rgba(255,255,255,.86) !important;
+  color: rgba(20,24,28,.92) !important;
+  border: 1px solid rgba(20,24,28,.10) !important;
+}
+
+/* Close (X) visibility in LIGHT theme (was washed out) */
+body:not([data-theme="night"]) .closeBtn,
+body:not([data-theme="night"]) .sheetClose,
+body:not([data-theme="night"]) .bmClose,
+body:not([data-theme="night"]) .xBtn{
+  background: rgba(0,0,0,.08) !important;
+  color: rgba(20,24,28,.92) !important;
+  border: 1px solid rgba(20,24,28,.10) !important;
+}
+
+/* Responsive sheets/modals on phones: safe padding + no overflow */
+@media (max-width: 520px){
+  .sheet, .dialog, .panel, .bmSheetWrap, .chaptersSheet{
+    width: calc(100% - 16px) !important;
+    max-width: calc(100% - 16px) !important;
+    margin: 8px !important;
+    border-radius: 22px !important;
+  }
+  .bmTitleRow{ flex-wrap: wrap !important; gap: 6px !important; }
+  .formRow{ flex-wrap: wrap !important; }
+  .formRow > *{ max-width: 100% !important; }
+}
+
 `;
     document.head.appendChild(st);
   }catch(e){}
