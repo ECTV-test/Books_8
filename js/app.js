@@ -1282,6 +1282,66 @@ body[data-theme="night"] #popBookmark.active span{
   color: #e9f0ff !important;
   fill: #e9f0ff !important;
 }
+
+/* === v3.4 final polish === */
+
+/* Library cards should match Continue Reading frame + rounded corners */
+.libraryItem{
+  border-radius: 28px !important;
+  overflow: hidden;
+}
+
+/* Light theme: ensure library cards also have the framed glass look */
+body:not([data-theme="night"]) .libraryItem{
+  background: rgba(255,255,255,.70) !important;
+  border: 1px solid rgba(20,24,28,.08) !important;
+  box-shadow: 0 10px 30px rgba(0,0,0,.06);
+}
+
+/* Details description box: match bookmark glass tone */
+body[data-theme="night"] .detailsDesc{
+  background: rgba(255,255,255,.10) !important;
+  border: 1px solid rgba(255,255,255,.10) !important;
+  color: var(--appText) !important;
+  border-radius: 18px !important;
+}
+body:not([data-theme="night"]) .detailsDesc{
+  background: rgba(255,255,255,.66) !important;
+  border: 1px solid rgba(20,24,28,.08) !important;
+  color: var(--appBtnText) !important;
+  border-radius: 18px !important;
+}
+
+/* Make all major sheets/dialogs slightly "glassy" in light too (subtle) */
+body:not([data-theme="night"]) .bmSheet,
+body:not([data-theme="night"]) .sheet,
+body:not([data-theme="night"]) .modal,
+body:not([data-theme="night"]) .dialog{
+  background: rgba(255,255,255,.74) !important;
+  border: 1px solid rgba(20,24,28,.08) !important;
+}
+
+/* Popover bookmark button: active should look clearly filled in night */
+body[data-theme="night"] #popBookmark.active{
+  background: rgba(255,255,255,.26) !important;
+  border: 1px solid rgba(255,255,255,.20) !important;
+  box-shadow: 0 0 0 1px rgba(0,0,0,.25) inset !important;
+  color: #fff !important;
+}
+body[data-theme="night"] #popBookmark.active svg,
+body[data-theme="night"] #popBookmark.active i{
+  color: #fff !important;
+  fill: #fff !important;
+}
+
+/* Remove any pill/outline around level inside progress chips */
+.pkgChip .lvl{
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+
 `;
     document.head.appendChild(st);
   }catch(e){}
