@@ -1135,14 +1135,35 @@ body[data-theme="night"] .bmRow{
   border: 1px solid rgba(255,255,255,.08) !important;
 }
 
-/* Library segmented buttons in LIGHT: ensure readable labels */
-body:not([data-theme="night"]) .segBtn{
-  color: rgba(20,24,28,.70) !important;
+/* Bookmarks page in night: fix low-contrast text */
+body[data-theme="night"] .bmItem,
+body[data-theme="night"] .bmCard,
+body[data-theme="night"] .bmRow,
+body[data-theme="night"] .bmItem * ,
+body[data-theme="night"] .bmCard * ,
+body[data-theme="night"] .bmRow *{
+  color: var(--appText);
 }
-body:not([data-theme="night"]) .segBtn.active{
-  color: rgba(20,24,28,.92) !important;
+body[data-theme="night"] .bmItem .muted,
+body[data-theme="night"] .bmCard .muted,
+body[data-theme="night"] .bmRow .muted,
+body[data-theme="night"] .bmItem .subtle,
+body[data-theme="night"] .bmCard .subtle,
+body[data-theme="night"] .bmRow .subtle{
+  color: var(--appMuted) !important;
 }
 
+/* Library segmented buttons in LIGHT: ensure readable labels */
+body:not([data-theme="night"]) .segBtn,
+body:not([data-theme="night"]) .segmented .segBtn,
+body:not([data-theme="night"]) .segmented button{
+  color: rgba(20,24,28,.82) !important;
+}
+body:not([data-theme="night"]) .segBtn.active,
+body:not([data-theme="night"]) .segmented .segBtn.active,
+body:not([data-theme="night"]) .segmented button.active{
+  color: rgba(255,255,255,.96) !important;
+}
 /* Top bars (Read/Listen): frosted like player bar in both themes */
 .readTopBar, .listenTop{
   -webkit-backdrop-filter: blur(18px) saturate(120%);
