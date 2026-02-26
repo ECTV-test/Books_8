@@ -1124,6 +1124,22 @@ body[data-theme="night"] .chip{
 }
 
 /* Close (X) visibility in sheets/modals */
+
+/* Close buttons (light): keep X readable */
+body:not([data-theme="night"]) .closeBtn,
+body:not([data-theme="night"]) .sheetClose,
+body:not([data-theme="night"]) .bmClose,
+body:not([data-theme="night"]) .xBtn{
+  background: rgba(0,0,0,.06);
+  color: rgba(20,24,28,.88) !important;
+  border: 1px solid rgba(0,0,0,.10);
+}
+body:not([data-theme="night"]) .closeBtn:hover,
+body:not([data-theme="night"]) .sheetClose:hover,
+body:not([data-theme="night"]) .bmClose:hover,
+body:not([data-theme="night"]) .xBtn:hover{
+  background: rgba(0,0,0,.10);
+}
 body[data-theme="night"] .closeBtn,
 body[data-theme="night"] .sheetClose,
 body[data-theme="night"] .bmClose,
@@ -1218,6 +1234,12 @@ body[data-theme="night"] .bmLineMark .lineCardBtn::after{
   background: rgba(255,255,255,.62) !important;
   opacity: 1 !important;
 }
+
+
+/* Bookmarks page: always put author/series on second line under title (avoid overlap everywhere) */
+.bmTitleRow{ display:block !important; }
+.bmTitleRow .bmTitle{ display:block !important; }
+.bmTitleRow .bmMeta{ display:block !important; margin-top: 6px !important; }
 
 /* Mobile: prevent title/meta overlap in Bookmarks list */
 @media (max-width: 520px){
