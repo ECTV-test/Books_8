@@ -14,7 +14,8 @@ ROOT = Path(__file__).resolve().parents[1]
 BOOKS_DIR = ROOT / "books"
 OUT = BOOKS_DIR / "index.json"
 
-KEEP = ["id", "series", "title_ua", "title_en", "level", "durationMin", "cover"]
+# Keep a stable minimal set, plus any title_* keys (so UI-language titles can render from index.json)
+BASE_KEEP = ["id", "series", "author", "level", "durationMin", "cover"]
 
 items = []
 if BOOKS_DIR.exists():
@@ -25,7 +26,18 @@ if BOOKS_DIR.exists():
     if not book_json.exists():
       continue
     data = json.loads(book_json.read_text(encoding="utf-8"))
-    item = {k: data.get(k) for k in KEEP if k in data}
+
+    item = {}
+    # base fields (if present)
+    for k in BASE_KEEP:
+      if k in data:
+        item[k] = data.get(k)
+
+    # all localized titles
+    for k, v in (data or {}).items():
+      if isinstance(k, str) and k.startswith("title_") and v is not None:
+        item[k] = v
+
     # fallback id from folder name
     item.setdefault("id", book_dir.name)
     items.append(item)
