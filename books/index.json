@@ -1,23 +1,5 @@
 [
   {
-    "id": "brave-new-world",
-    "series": "FANTASY",
-    "level": "B1 English Learners",
-    "durationMin": 25,
-    "cover": "cover.jpg",
-    "title_ua": "Brave New World",
-    "title_en": "Brave New World"
-  },
-  {
-    "id": "grandpas-new-phone",
-    "series": "NEW",
-    "level": "A1 English Learners",
-    "durationMin": 14,
-    "cover": "cover.jpg",
-    "title_ua": "Grandpa’s New Phone",
-    "title_en": "Grandpa’s New Phone"
-  },
-  {
     "id": "invisible-sandwich",
     "series": "NEW",
     "author": "English Club TV Group",
@@ -31,6 +13,24 @@
     "title_de": "Das unsichtbare Sandwich",
     "title_es": "El sándwich invisible",
     "title_fr": "Le sandwich invisible"
+  },
+  {
+    "id": "grandpas-new-phone",
+    "series": "NEW",
+    "level": "A1 English Learners",
+    "durationMin": 14,
+    "cover": "cover.jpg",
+    "title_ua": "Grandpa’s New Phone",
+    "title_en": "Grandpa’s New Phone"
+  },
+  {
+    "id": "brave-new-world",
+    "series": "FANTASY",
+    "level": "B1 English Learners",
+    "durationMin": 25,
+    "cover": "cover.jpg",
+    "title_ua": "Brave New World",
+    "title_en": "Brave New World"
   },
   {
     "id": "match-made-in-mistake",
